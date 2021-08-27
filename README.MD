@@ -1,4 +1,4 @@
-﻿# Momentum
+# Momentum
 This is a set of c# bindings for [cute_c2.h](https://github.com/RandyGaul/cute_headers/blob/master/cute_c2.h), and the resullting abstract layer.
 The raw bindings are available through `using static Momentum.cute_c2`, and everything else is available normally.
 
