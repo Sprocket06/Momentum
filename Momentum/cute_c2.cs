@@ -1,8 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Runtime.InteropServices;
-
-namespace Momentum
+﻿namespace Momentum
 {
     static class cute_c2
     {
@@ -16,9 +12,12 @@ namespace Momentum
                 this.x = x;
                 this.y = y;
             }
+            public static implicit operator c2v(Vector2 other) => new(other.X, other.Y);
+            public static implicit operator Vector2(c2v other) => new(other.x, other.y);
             public float x;
             public float y;
         }
+        
 
         [StructLayout(LayoutKind.Sequential)]
         public struct c2Circle

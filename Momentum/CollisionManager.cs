@@ -1,25 +1,20 @@
-﻿using System.Collections.Generic;
+﻿namespace Momentum;
 
-namespace Momentum
+public class CollisionManager
 {
-    class CollisionManager
+    public List<ICollisionEntity> Entities;
+
+    public void Register(ICollisionEntity e) => Entities.Add(e);
+
+    public void ProcessMovement(ICollisionEntity entity)
     {
-        public static CollisionManager Instance;
-        public List<Collider> Colliders;
-
-        static CollisionManager()
+        foreach (ICollisionEntity other in Entities)
         {
-            Instance = new CollisionManager();
+            if (entity.Collider.CollidesWith(other.Collider))
+            {
+                entity.OnCollision(other);
+                other.OnCollision(entity);
+            }
         }
-        public CollisionManager()
-        {
-            Colliders = new List<Collider>();
-        }
-
-        public void Register(Collider c)
-        {
-            Colliders.Add(c);
-        }
-        
     }
 }

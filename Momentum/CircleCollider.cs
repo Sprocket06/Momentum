@@ -1,43 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using static Momentum.cute_c2;
+﻿namespace Momentum;
 
-namespace Momentum
+public class CircleCollider : Collider
 {
-    class CircleCollider : Collider
+    public float Radius;
+
+    public CircleCollider(Vector2 pos, float r)
     {
-        public override dynamic CollisionShape { get; set; }
-        public float Radius { get; set; }
-
-        public CircleCollider(Vector2 pos, float radius)
+        this.Radius = r;
+        this.Position = pos;
+    }
+    
+    public override bool CollidesWith(Collider other)
+    {
+        switch (other)
         {
-            Position = pos;
-            Radius = radius;
-            CollisionShape = new c2Circle(new c2v(pos.X, pos.Y), radius);
-        }
-
-        public override event EventHandler<CollisionEventArgs> Collision;
-
-        public override void Move(Vector2 newPos)
-        {
-            Position = newPos;
-            CollisionShape = new c2Circle(new c2v(Position.X, Position.Y), Radius);
-            List<Collision> Collisions = new();
-            Manifold cInfo;
-            foreach (Collider shape in CollisionManager.Instance.Colliders)
+            case RectangleCollider r:
             {
-                if (Object.ReferenceEquals(shape, this)) continue;
-                cInfo = new();
-                if (IsIntersecting(shape, ref cInfo))
-                {
-                    Collisions.Add(new Collision(shape, cInfo));
-                }
+                var rect = new cute_c2.c2AABB(r.Position, r.Position + r.Size);
+                var circle = new cute_c2.c2Circle(this.Position, this.Radius);
+
+                return c2CircletoAABB(circle, rect);
             }
-            if (Collisions.Count != 0)
+            case CircleCollider c:
             {
-                Collision?.Invoke(this, new CollisionEventArgs(Collisions));
+                var circleA = new cute_c2.c2Circle(this.Position, this.Radius);
+                var circleB = new cute_c2.c2Circle(c.Position, c.Radius);
+
+                return c2CircletoCircle(circleA, circleB);
             }
+            default:
+                return false;
         }
     }
 }
