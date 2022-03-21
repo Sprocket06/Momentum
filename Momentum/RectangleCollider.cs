@@ -1,4 +1,6 @@
-﻿namespace Momentum;
+﻿using System;
+
+namespace Momentum;
 
 public class RectangleCollider : Collider
 {
@@ -16,10 +18,10 @@ public class RectangleCollider : Collider
         {
             case RectangleCollider r:
             {
-                var rectA = new cute_c2.c2AABB(this.Position, this.Position+this.Size);
+                var rectA = new cute_c2.c2AABB(this.Position, this.Position + this.Size);
                 var rectB = new cute_c2.c2AABB(r.Position, r.Position + r.Size);
 
-                return c2AABBtoAABB(rectA,rectB);
+                return c2AABBtoAABB(rectA, rectB);
             }
             case CircleCollider c:
                 var rect = new cute_c2.c2AABB(this.Position, this.Position + this.Size);
@@ -28,7 +30,33 @@ public class RectangleCollider : Collider
                 return c2CircletoAABB(circle, rect);
             default:
                 return false;
-            
+
+        }
+    }
+
+    public override CollisionData GetCollisionData(Collider other)
+    {
+        c2Manifold manifold = new();
+        switch (other)
+        {
+            case RectangleCollider r:
+            {
+                var rectA = new cute_c2.c2AABB(this.Position, this.Position + this.Size);
+                var rectB = new c2AABB(r.Position, r.Position + r.Size);
+
+                c2AABBtoAABBManifold(rectA, rectB, ref manifold);
+                return new(manifold);
+            }
+            case CircleCollider c:
+            {
+                var rect = new c2AABB(this.Position, this.Position + this.Size);
+                var circle = new c2Circle(c.Position, c.Radius);
+
+                c2CircletoAABBManifold(circle, rect, ref manifold);
+                return new(manifold);
+            }
+            default:
+                throw new UnsupportedColliderException();
         }
     }
 }

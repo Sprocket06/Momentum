@@ -1,4 +1,6 @@
-﻿namespace Momentum;
+﻿using System;
+
+namespace Momentum;
 
 public class CircleCollider : Collider
 {
@@ -30,6 +32,32 @@ public class CircleCollider : Collider
             }
             default:
                 return false;
+        }
+    }
+
+    public override CollisionData GetCollisionData(Collider other)
+    {
+        c2Manifold manifold = new();
+        switch (other)
+        {
+            case RectangleCollider r:
+            {
+                var rect = new c2AABB(r.Position, r.Position + r.Size);
+                var circle = new c2Circle(this.Position, this.Radius);
+                
+                c2CircletoAABBManifold(circle, rect, ref manifold);
+                return new(manifold);
+            }
+            case CircleCollider c:
+            {
+                var circleA = new c2Circle(this.Position, this.Radius);
+                var circleB = new c2Circle(c.Position, c.Radius);
+                
+                c2CircletoCircleManifold(circleA, circleB, ref manifold);
+                return new(manifold);
+            }
+            default:
+                throw new UnsupportedColliderException();
         }
     }
 }
