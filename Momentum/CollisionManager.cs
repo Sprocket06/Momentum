@@ -2,7 +2,7 @@
 
 public class CollisionManager
 {
-    public List<ICollisionEntity> Entities;
+    public List<ICollisionEntity> Entities = new();
 
     public void Register(ICollisionEntity e) => Entities.Add(e);
 
