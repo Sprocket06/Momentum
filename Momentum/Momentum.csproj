@@ -12,4 +12,10 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="cute_c2.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
