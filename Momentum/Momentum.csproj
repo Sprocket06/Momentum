@@ -6,4 +6,10 @@
         <Nullable>warnings</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Update="libcute_c2.so">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
